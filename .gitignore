@@ -1,0 +1,9 @@
+# Files
+*.hdf5
+.ipynb_checkpoints
+
+# Folders
+.vscode/
+venv/
+illustris_python/
+__pycache__

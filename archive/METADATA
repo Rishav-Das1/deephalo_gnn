@@ -1,0 +1,83 @@
+# NOTE: KDTree and Octree for partitioning space
+
+# NOTE: USEFUL METADATA
+# Masses are all 0
+# sim<KeysViewHDF5 ['Groups/99', 'Offsets/99/', 'Snapshots/99/PartType1/']>
+# 'Snapshots/99/PartType1/': 'Coordinates', 'Potential' (grav pot energy), 'Velocities' (multiply by sqrt(a) to get peculiar velocities)
+# 'Offsets/99/Group/': 'SnapByType'
+# 'Offsets/99/Subhalo': 'SnapByType'
+# 'Groups/99': 'Group', 'Subhalo'
+
+# # halo & subhalo offsets
+# np.asarray(sim['Offsets/99/Group/SnapByType'])[:, 1]
+# np.asarray(sim['Offsets/99/Subhalo/SnapByType'])[:, 1]
+
+# # Halo Masses in 200x Overdense sphere -> Use this for selecting halos
+# Also see M_500 and corresponding radii.
+# np.asarray(sim['Groups/99/Group/Group_M_Crit200'])
+
+# # Halo & subhalo masses
+# np.asarray(sim['Groups/99/Group/GroupMass'])
+# np.asarray(sim['Groups/99/Subhalo/SubhaloMass'])
+
+# # local total comoving mass density, estimated using the standard cubic-spline SPH kernel over all particles/cells within a radius of SubfindHsml.
+# np.asarray(t503d.sim['Snapshots/99/PartType1/SubfindDensity'])
+# np.asarray(t503d.sim['Snapshots/99/PartType1/SubfindDMDensity'])
+
+# # Length of halos & subhalos (number of particles)
+# np.asarray(sim['Groups/99/Group/GroupLen'])
+# np.asarray(sim['Groups/99/Subhalo/SubhaloLen'])
+
+# # shid of first subhalo in halo
+# np.asarray(sim['Groups/99/Group/GroupFirstSub'])
+
+# # number of subhalos in halo
+# np.asarray(sim['Groups/99/Group/GroupNsubs'])
+
+# # halo & subhalo pos -> Use for getting relative position for subhalos within halo
+# Also see 'GroupVel', 'SubhaloVel'
+#       
+# np.asarray(sim['Groups/99/Subhalo/SubhaloPos'])
+
+# # Index into the table of halos - can be used to get shids in hids, as well as their number (.shape)
+# np.asarray(sim['Groups/99/Subhalo/SubhaloGrNr'])
+
+# # Particle ID of most bound particle in the subhalo
+# np.asarray(sim['Groups/99/Subhalo/SubhaloIDMostbound'])
+
+# # Other galaxy / sh properties from here for stats purposes
+# sim['Groups/99/Subhalo'].keys()
+
+# # Merger tree data - not very relevant
+# sim['Offsets/99/Subhalo/SubLink'].keys()
+# sim['Offsets/99/Subhalo/LHaloTree'].keys()
+
+# "subhalo_matching_to_dark.hdf5" - tangentially relevant for now
+# matched baryonic and DM-only runs (e.g. TNG100-1 and TNG100-1-Dark, same res)
+
+# Header has particle mass (same for all DM), boxSize and Omega values
+# self.header = header = dict(sim['Header'].attrs.items())
+# self.partMass = header["MassTable"][1]
+
+
+## NOTE: Useful methods / metadata
+
+# halo_len = np.asarray(t503d.sim['Groups/99/Group/GroupLen'])
+# halo_len[halo_len >= 10_000].shape, halo_len[673] # 674 halos in total
+# # NOTE: Tells us how many have >= 10K particles. So, till 673 (inclusive) halos to be considered for now
+
+# masses = np.asarray(t503d.sim['Groups/99/Group/Group_M_Crit200'])
+# masses[masses >= 1].shape, masses[9019] # Till 9019 (inclusive) | 9020 halos in total
+# # NOTE: Tells us how many have mass >= 1E10 M_sol
+
+# num_sh_in_h = np.asarray(t503d.sim['Groups/99/Group/GroupNsubs'])
+# num_sh_in_h[num_sh_in_h >= 20].shape # NOTE: To know number of halos with num_sh >= 20
+
+# # NOTE: To suss out anomalous halos
+# t503d.numpart_sh_in_h(100)
+
+# info = t503d.get_halo_info(200)
+# info # NOTE: To get all info on halos
+
+# t503d.plot_posvel(673)
+# NOTE: To visualize relative positions and velocities
